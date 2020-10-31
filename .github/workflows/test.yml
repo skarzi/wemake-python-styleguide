@@ -1,25 +1,29 @@
 name: test
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
 
     - name: Install poetry
       run: |
+        pip install -U pip
+
         curl -sSL \
-          "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python
+          "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+
+        echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
 
     - name: Set up cache
       uses: actions/cache@v1
@@ -28,16 +32,15 @@ jobs:
         key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
-        source "$HOME/.poetry/env"
-
         poetry config virtualenvs.in-project true
+        poetry run pip install -U pip
         poetry install
 
-    - name: Run checks and push coverage
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+    - name: Run tests
       run: |
-        source "$HOME/.poetry/env"
-
         make test
-        poetry run coveralls
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
