@@ -86,10 +86,7 @@ ContextNodes = Union[
 ]
 
 #: In cases we need to work with both access types.
-AnyAccess = Union[
-    ast.Attribute,
-    ast.Subscript,
-]
+AnyAccess = Union[ast.Attribute, ast.Subscript]
 
 #: In case we need to handle types that can be chained.
 AnyChainable = Union[
