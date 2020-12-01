@@ -77,9 +77,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
             self.add_violation(bp.BaseExceptionSubclassViolation(node))
         elif id_attr == 'object' and len(node.bases) >= 2:
             self.add_violation(
-                consistency.ObjectInBaseClassesListViolation(
-                    node, text=id_attr,
-                ),
+                consistency.ObjectInBaseClassesListViolation(node, text=id_attr),
             )
         elif classes.is_forbidden_super_class(id_attr):
             self.add_violation(
