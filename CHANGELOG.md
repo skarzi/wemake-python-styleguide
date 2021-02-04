@@ -39,6 +39,7 @@ Semantic versioning in our case means:
 - Forbids not returning anything in functions and methods starting with `get_`
 - Forbids to use empty comment
 - Forbids using bitwise operation with boolean operation
+- Forbids inconsistent structuring of multiline comprehensions
 
 ### Bugfixes
 
@@ -51,6 +52,7 @@ Semantic versioning in our case means:
 - Fixes false positives in WPS513 and WPS323
 - Fixes false positive WPS426 if `lambda` in loop uses only its arguments
 - Fixes false negative WPS421 with `pprint.pprint`
+- Fixes false positive ImplicitEnumerateViolation on range with step #1742
 
 ### Misc
 
