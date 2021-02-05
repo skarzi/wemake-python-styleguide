@@ -330,7 +330,9 @@ class NoqaVisitor(BaseTokenVisitor):
             for excluded in excludes_list:
                 if re.fullmatch(r'{0}($|\d+)'.format(noqa_code), excluded):
                     self.add_violation(
-                        ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
+                        ForbiddenInlineIgnoreViolation(
+                            text=str(noqa_excludes),
+                        ),
                     )
                     return
 
