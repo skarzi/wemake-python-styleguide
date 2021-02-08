@@ -14,9 +14,15 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds `python3.9` support
+- Changes how we treat own/foreign attributes,
+  since now we only check assigned attribute names for `self`/`cls`/`mcs`,
+  but not any other ones.
+  So, now writting `point.x = 1` will not trigger any violations.
+  Previously, it would raise "too short name".
 - Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
 - Forbids using `float("NaN")`.
+- Forbids assigning to a slice
 - Allow `__call__` method to be asynchronous
 - Allows common strings not to be counted against string constant overuse limit
 - Forbids to unpack iterable objects to lists #1259
@@ -40,6 +46,8 @@ Semantic versioning in our case means:
 - Forbids to use empty comment
 - Forbids using bitwise operation with boolean operation
 - Forbids inconsistent structuring of multiline comprehensions
+- Forbids to use unpythonic getters and setters such as `get_attribute` or `set_attribute`
+- Now `credits`, `license`, and `copyright` builtins are free to shadow
 
 ### Bugfixes
 
@@ -52,7 +60,14 @@ Semantic versioning in our case means:
 - Fixes false positives in WPS513 and WPS323
 - Fixes false positive WPS426 if `lambda` in loop uses only its arguments
 - Fixes false negative WPS421 with `pprint.pprint`
+- Fixes WPS441 triggering when reusing variable names in multiple loops
 - Fixes false positive ImplicitEnumerateViolation on range with step #1742
+- Allows to use `_` to declare several unused variables,
+  like: `x, _, _ = coordinates()`
+- Fixes variable reassignment in class context
+- Fixes that `*'abc'` was not counted as pointless star expression
+- Fixes that `-some` was counted as overused expression
+- Fixes several bugs with attribute names
 
 ### Misc
 
