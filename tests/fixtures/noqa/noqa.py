@@ -531,7 +531,7 @@ def useless_returning_else():
 
 
 def multiple_return_path():
-    try:  # noqa: WPS419
+    try:  # noqa: WPS419, WPS503
         return 1
     except Exception:
         return 2
@@ -784,8 +784,7 @@ def get_item():  # noqa: WPS463
 
 bad_bitwise = True | True # noqa: WPS465
 
-matrix = [ # noqa: WPS361
-   some(number) for numbers in matrix # noqa: WPS361
+matrix = [
+   some(number) for numbers in matrix
    for number in numbers # noqa: WPS361
-   if number > 0 # noqa: WPS361
-] # noqa: WPS361
+]
