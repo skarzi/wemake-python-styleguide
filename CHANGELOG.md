@@ -16,11 +16,22 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names / logic,
   change the client facing API, change code conventions signigicantly, etc.
 
+
 ## 0.15.2
 
 ### Bugfixes
 
 - Fixes `BitwiseAndBooleanMixupViolation` work with PEP 604 union types #1884
+- Fixes `CognitiveModuleComplexityViolation` to not trigger
+  for a single-item modules
+- Fixes that `ConstantConditionViolation` was not reported for a `BoolOp`
+- Functions and methods marked as `@overload` or `@typing.overload`
+  do not count in complexity rules
+
+### Misc
+
+- Updates GitHub Action's base Python image version to `3.8.8`
+
 
 ## 0.15.1
 
