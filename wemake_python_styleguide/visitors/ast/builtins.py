@@ -1,7 +1,8 @@
 import ast
 import re
 import string
-from collections import Counter, Hashable, defaultdict
+from collections import Counter, defaultdict
+from collections.abc import Hashable
 from contextlib import suppress
 from typing import (
     ClassVar,
@@ -185,10 +186,12 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
             TooComplexFormattedStringViolation
 
         """
-        self._check_complex_formatted_string(node)
-
-        # We don't allow `f` strings by default:
-        self.add_violation(consistency.FormattedStringViolation(node))
+        if not isinstance(nodes.get_parent(node), ast.FormattedValue):
+            # We don't allow `f` strings by default,
+            # But, we need this condition to make sure that this
+            # is not a part of complex string format like `f"Count={count:,}"`:
+            self._check_complex_formatted_string(node)
+            self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
 
     def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
@@ -260,8 +263,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
                 isinstance(part, self._single_use_types)
                 for part in chained_parts
             ) == 1
-        # All chaining with fewer elements is fine!
-        return True
+        return True  # All chaining with fewer elements is fine!
 
 
 @final
